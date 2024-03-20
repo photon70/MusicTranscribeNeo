@@ -64,22 +64,31 @@ void Main()
 
 	TextEditState textEdit;
 
-	const Audio piano[16] = {{GMInstrument::Piano1, PianoKey::C3, 0.1s },
+	const Audio piano[24] = {{GMInstrument::Piano1, PianoKey::C3, 0.1s },
 							{ GMInstrument::Piano1, PianoKey::CS3, 0.1s },
 							{ GMInstrument::Piano1, PianoKey::D3, 0.1s },
 							{ GMInstrument::Piano1, PianoKey::DS3, 0.1s },
 							{ GMInstrument::Piano1, PianoKey::E3, 0.1s },
 							{ GMInstrument::Piano1, PianoKey::F3, 0.1s },
+							{ GMInstrument::Piano1, PianoKey::FS3, 0.1s },
 							{ GMInstrument::Piano1, PianoKey::G3, 0.1s },
+							{ GMInstrument::Piano1, PianoKey::GS3, 0.1s },
 							{ GMInstrument::Piano1, PianoKey::A3, 0.1s },
+							{ GMInstrument::Piano1, PianoKey::AS3, 0.1s },
+							{ GMInstrument::Piano1, PianoKey::B3, 0.1s },
 							{ GMInstrument::Piano1, PianoKey::C4, 0.1s },
 							{ GMInstrument::Piano1, PianoKey::CS4, 0.1s },
 							{ GMInstrument::Piano1, PianoKey::D4, 0.1s },
 							{ GMInstrument::Piano1, PianoKey::DS4, 0.1s },
 							{ GMInstrument::Piano1, PianoKey::E4, 0.1s },
 							{ GMInstrument::Piano1, PianoKey::F4, 0.1s },
+							{ GMInstrument::Piano1, PianoKey::FS4, 0.1s },
 							{ GMInstrument::Piano1, PianoKey::G4, 0.1s },
-							{ GMInstrument::Piano1, PianoKey::A4, 0.1s } };
+							{ GMInstrument::Piano1, PianoKey::GS4, 0.1s },
+							{ GMInstrument::Piano1, PianoKey::A4, 0.1s },
+							{ GMInstrument::Piano1, PianoKey::AS4, 0.1s },
+							{ GMInstrument::Piano1, PianoKey::B4, 0.1s } };
+	const Audio buzzer = { GMInstrument::Flute, PianoKey::C6, 0.05s };
 
 	auto seekSamples = [&](int64 s) {
 		audio.seekSamples(std::min(std::max(s, static_cast<int64>(0)), static_cast<int64>(audio.samples() - 1)));
@@ -155,9 +164,14 @@ void Main()
 		if (Rect(0, 460, 1280, 260).contains(Cursor::Pos()) && MouseL.down())
 			state = State::DragNote;
 
-		unsigned short value = 0;
+		unsigned int value = 0;
 
 		if (state != State::Edit) {
+			if (KeyDelete.down()) {
+				if (score.get(currentNg8) != 0)
+					buzzer.playOneShot();
+				score.clear(currentNg8);
+			}
 			if (counter.isUpdated(2) && KeyA.pressed() || KeyA.down())
 				value |= Bit(0);
 			if (counter.isUpdated(2) && KeyS.pressed() || KeyS.down())
@@ -166,33 +180,51 @@ void Main()
 				value |= Bit(2);
 			if (counter.isUpdated(2) && KeyF.pressed() || KeyF.down())
 				value |= Bit(3);
-			if (counter.isUpdated(2) && KeyJ.pressed() || KeyJ.down())
+			if (counter.isUpdated(2) && KeyG.pressed() || KeyG.down())
 				value |= Bit(4);
-			if (counter.isUpdated(2) && KeyK.pressed() || KeyK.down())
+			if (counter.isUpdated(2) && KeyH.pressed() || KeyH.down())
 				value |= Bit(5);
-			if (counter.isUpdated(2) && KeyL.pressed() || KeyL.down())
+			if (counter.isUpdated(2) && KeyJ.pressed() || KeyJ.down())
 				value |= Bit(6);
-			if (counter.isUpdated(2) && KeySemicolon_JIS.pressed() || KeySemicolon_JIS.down())
+			if (counter.isUpdated(2) && KeyK.pressed() || KeyK.down())
 				value |= Bit(7);
-			if (counter.isUpdated(2) && KeyZ.pressed() || KeyZ.down())
+			if (counter.isUpdated(2) && KeyL.pressed() || KeyL.down())
 				value |= Bit(8);
-			if (counter.isUpdated(2) && KeyX.pressed() || KeyX.down())
+			if (counter.isUpdated(2) && KeySemicolon_JIS.pressed() || KeySemicolon_JIS.down())
 				value |= Bit(9);
-			if (counter.isUpdated(2) && KeyC.pressed() || KeyC.down())
+			if (counter.isUpdated(2) && KeyColon_JIS.pressed() || KeyColon_JIS.down())
 				value |= Bit(10);
-			if (counter.isUpdated(2) && KeyV.pressed() || KeyV.down())
+			if (counter.isUpdated(2) && KeyRBracket.pressed() || KeyRBracket.down())
 				value |= Bit(11);
-			if (counter.isUpdated(2) && KeyM.pressed() || KeyM.down())
+			if (counter.isUpdated(2) && KeyQ.pressed() || KeyQ.down())
 				value |= Bit(12);
-			if (counter.isUpdated(2) && KeyComma.pressed() || KeyComma.down())
+			if (counter.isUpdated(2) && KeyW.pressed() || KeyW.down())
 				value |= Bit(13);
-			if (counter.isUpdated(2) && KeyPeriod.pressed() || KeyPeriod.down())
+			if (counter.isUpdated(2) && KeyE.pressed() || KeyE.down())
 				value |= Bit(14);
-			if (counter.isUpdated(2) && KeySlash.pressed() || KeySlash.down())
+			if (counter.isUpdated(2) && KeyR.pressed() || KeyR.down())
 				value |= Bit(15);
+			if (counter.isUpdated(2) && KeyT.pressed() || KeyT.down())
+				value |= Bit(16);
+			if (counter.isUpdated(2) && KeyY.pressed() || KeyY.down())
+				value |= Bit(17);
+			if (counter.isUpdated(2) && KeyU.pressed() || KeyU.down())
+				value |= Bit(18);
+			if (counter.isUpdated(2) && KeyI.pressed() || KeyI.down())
+				value |= Bit(19);
+			if (counter.isUpdated(2) && KeyO.pressed() || KeyO.down())
+				value |= Bit(20);
+			if (counter.isUpdated(2) && KeyP.pressed() || KeyP.down())
+				value |= Bit(21);
+			if (counter.isUpdated(2) && KeyGraveAccent.pressed() || KeyGraveAccent.down())
+				value |= Bit(22);
+			if (counter.isUpdated(2) && KeyLBracket.pressed() || KeyLBracket.down())
+				value |= Bit(23);
 		}
 		if (value)
 			if (KeyLShift.pressed() || KeyRShift.pressed()) {
+				if ((value & score.get(currentNg8)) != 0)
+					buzzer.playOneShot();
 				score.unset(currentNg8, value);
 				value = 0;
 			}
@@ -209,12 +241,12 @@ void Main()
 			if (i % 4 == 0)
 				font(Format(i / 4)).drawAt(buf, 465, Palette::Black);
 
-			for (int k = 0; k < 8; ++k) {
-				if (BitIf(value, Bit(k + 8))) {
-					Circle(buf + 10, 490 + 30 * k + 10, 10).draw(HSV(45 * k, 0.8, 0.4), HSV(45 * k, 0.4, 0.2));
+			for (int k = 0; k < 12; ++k) {
+				if (BitIf(value, Bit(k + 12))) {
+					Circle(buf + 10, 485 + 20 * k + 7, 8).draw(HSV(30 * k, 0.8, 0.4), HSV(30 * k, 0.4, 0.2));
 				}
 				if (BitIf(value, Bit(k))) {
-					Circle(buf, 490 + 30 * k, 13).draw(HSV(45 * k, 0.8, 0.8), HSV(45 * k, 0.4, 0.4));
+					Circle(buf, 485 + 20 * k, 10).draw(HSV(30 * k, 0.8, 0.8), HSV(30 * k, 0.4, 0.4));
 				}
 			}
 
@@ -237,7 +269,7 @@ void Main()
 					audio.play();
 				}
 			}
-			if (!audio.isPlaying() && KeyQ.down()) {
+			if (!audio.isPlaying() && KeyZ.down()) {
 				audio.seekSamples(0);
 				counter.reset(0);
 			}
@@ -285,10 +317,11 @@ void Main()
 				score.bpm = Math::Round(count / (last - start) * 60.0);
 				counter.reset(audio.posSec());
 			}
-			if (KeySpace.pressed())
+			if (KeySpace.pressed()) {
 				state = State::Default;
 				counter.setBpm(score.bpm);
 				audio.pause();
+			}
 			break;
 		case State::Edit:
 			if (!textEdit.active)
@@ -328,6 +361,7 @@ void Main()
 			}
 			if (splited[0].compare(U"speed") == 0) {
 				speed = Parse<double>(splited[1]);
+				audio.setSpeed(speed);
 			}
 			if (splited[0].compare(U"bpm") == 0) {
 				score.bpm = Parse<int>(splited[1]);	
@@ -354,13 +388,15 @@ void Main()
 		if (counter.isUpdated(2)) {
 			if (KeyDelete.pressed()) {
 				for (auto ng8 : counter.getAllCurrentNg8(2)) {
+					if (score.get(ng8) != 0)
+						buzzer.playOneShot();
 					score.clear(ng8);
 				}
 			}
 			value |= score.get(currentNg8);
 		}
 
-		for (int k = 0; k < 16; ++k) {
+		for (int k = 0; k < 24; ++k) {
 			if (BitIf(value, Bit(k))) {
 				piano[k].playOneShot();
 			}

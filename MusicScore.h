@@ -6,7 +6,7 @@ class MusicScore {
 public:
 	int64 start = 0;
 	int bpm = 60;
-	std::map<unsigned int, unsigned short> notes;
+	std::map<unsigned int, unsigned int> notes;
 
 	MusicScore() = default;
 
@@ -24,14 +24,14 @@ public:
 		return value;
 	}
 
-	void set(int key, unsigned short value) {
+	void set(int key, unsigned int value) {
 		if (value)
 			notes[key] |= value;
 		else
 			notes.erase(key);
 	}
 
-	void unset(int key, unsigned short value) {
+	void unset(int key, unsigned int value) {
 		if (value)
 			notes[key] &= (~value);
 	}
@@ -69,7 +69,7 @@ public:
 		br.read(&start, sizeof(start));
 		br.read(&bpm, sizeof(bpm));
 
-		std::pair<unsigned int, unsigned short> n;
+		std::pair<unsigned int, unsigned int> n;
 		notes.clear();
 		while (br.read(&n, sizeof(n))) {
 			notes.insert(n);
